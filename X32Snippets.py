@@ -5,7 +5,7 @@
 # X32 Snippets
 #
 # Last mod:
-# October 25, 2018
+# December 7th 2021
 #
 # Written by:
 # Simon Eves (simon@eves.us)
@@ -19,7 +19,7 @@
 #
 ################################################################################
 
-VERSION = "1.9.1" # with parameters for STC ACC 2018
+VERSION = "XXXX"
 
 ################################################################################
 # Imports
@@ -29,7 +29,7 @@ import time
 import sys
 import string
 
-from pyexcel_ods import get_data
+from pyexcel_ods3 import get_data
 
 
 ################################################################################
@@ -92,10 +92,8 @@ def read_cell_as_string(d, r, c):
     try:
         row = d[r - 1]
         cell = row[c - 1]
-        #print "DEBUG: cell " + str(r) + "/" + str(c) + " is type " + str(type(cell))
-        if type(cell) == unicode:
-            cell = cell.encode('utf-8')
-        return str(cell)
+        #print("DEBUG: cell " + str(r) + "/" + str(c) + " is type " + str(type(cell)))
+        return str(cell) # the string type automatically checks for utf-8 encoding
     except:
         return ''
 
@@ -189,17 +187,17 @@ def current_or_previous_channel_name(ods, row_index, col):
 if __name__ == "__main__":
 
     title = '# X32 Snippets v' + VERSION
-    print '#' * len(title)
-    print title
-    print '#' * len(title)
+    print('#' * len(title))
+    print(title)
+    print('#' * len(title))
     
     #
     # validate command-line parameters
     #
     
     if len(sys.argv) != 3:
-        print "";
-        print "Usage: X32Snippets.py <ods_file_name> <show_name>"
+        print("")
+        print("Usage: X32Snippets.py <ods_file_name> <show_name>")
         sys.exit(0)
         
     #
@@ -214,7 +212,7 @@ if __name__ == "__main__":
     #
     
     # report
-    print "Opening spreadsheet..."
+    print("Opening spreadsheet...")
     
     # read the file
     ods = get_data(ods_file_name)[SHEET_NAME]
@@ -226,7 +224,7 @@ if __name__ == "__main__":
     cue_labels = []
     
     # report
-    print "Creating cues..."
+    print("Creating cues...")
     
     # iterate rows until the end
     for row_index in range(SKIP_ROWS + 1, len(ods)):
@@ -249,14 +247,14 @@ if __name__ == "__main__":
             # also does not handle cues of form X.Y.Z or X.Y where Y > 9
             cue_number = str(int(round(float(cue) * 100.0)))
         except:
-            print 'ERROR: Found invalid cue number at row ' + str(row_index + 1)
+            print('ERROR: Found invalid cue number at row ' + str(row_index + 1))
             sys.exit()
             
         # get cue label
         cue_label = read_cell_as_string(ods, row_index, CUE_LABEL_COL)
         
         # report snippet
-        print 'Generating new cue "' + cue + '", label "' + cue_label + '"'
+        print('Generating new cue "' + cue + '", label "' + cue_label + '"')
             
         # open snippet file
         snp_file = open(show_name + '.' + str(snp_index).zfill(3) + '.snp', 'w')
@@ -346,7 +344,7 @@ if __name__ == "__main__":
     #
     
     # report
-    print 'Creating show file...'
+    print('Creating show file...')
     
     # open show file
     shw_file = open(show_name + '.shw', 'w')
@@ -356,7 +354,7 @@ if __name__ == "__main__":
     shw_file.write('show "' + show_name +'" 0 0 0 0 0 0 0 0 0 0 "X32-Edit 3.00"\n')
     
     # report
-    print 'Writing cues...'
+    print('Writing cues...')
     
     # write cues
     cue_index = 0
@@ -365,7 +363,7 @@ if __name__ == "__main__":
         cue_index = cue_index + 1
     
     # report
-    print 'Writing snippets...'
+    print('Writing snippets...')
     
     # write snippet refs
     snp_index = 0
@@ -377,4 +375,4 @@ if __name__ == "__main__":
     shw_file.close()
     
     # all done
-    print 'Done!'
+    print('Done!')
